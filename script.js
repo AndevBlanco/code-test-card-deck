@@ -1,3 +1,12 @@
+var url = window.location.href;
+
+var urlParams = new URL(url);
+
+var cards = urlParams.searchParams.get("cards");
+var suits = urlParams.searchParams.get("suits");
+var ranks = urlParams.searchParams.get("ranks");
+var limit = urlParams.searchParams.get("limit");
+
 class CardDeck {
 	constructor(deckElement, handElement) {
 		this.deckElement = document.querySelector(deckElement);
@@ -179,3 +188,36 @@ const deck = new CardDeck(".deck", ".hand");
 
 // Take a look at the deck object and its methods.
 console.log(deck);
+
+if(cards){
+	var cards_array = cards.split(' ');
+	// Draw cards by id
+	for(var i in cards_array){
+		deck.draw(cards_array[i]);
+	}
+}
+var filtered = false;
+if(suits){
+	var suits_array = suits.split(' ');
+	// Draw cards by suit
+	deck.filter('suit', suits_array);
+	filtered = true;
+}
+if(ranks){
+	var ranks_array = ranks.split(' ');
+	// Draw cards by rank
+	deck.filter('rank', ranks_array.map(Number));
+	filtered = true;
+}
+if(limit){
+	// Draw cards by limit
+	deck.limit(limit);
+	filtered = true;
+}
+
+if(filtered === true){
+	deck.drawFiltered();
+}
+
+
+
